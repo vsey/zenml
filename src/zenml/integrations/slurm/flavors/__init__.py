@@ -1,4 +1,4 @@
-from zenml.integrations.slurm.flavors.Slurm_step_operator_flavor import (
+from zenml.integrations.slurm.flavors.slurm_step_operator_flavor import (
     SlurmStepOperatorConfig,
     SlurmStepOperatorFlavor,
     SlurmStepOperatorSettings,
