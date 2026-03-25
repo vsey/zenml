@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 logger = get_logger(__name__)
 
 
-class ModalStepOperator(BaseStepOperator):
+class SlurmStepOperator(BaseStepOperator):
     """Step operator to run a step with Slurm.
 
     This class defines code that creates a slurm script and submits it
@@ -66,18 +66,17 @@ class ModalStepOperator(BaseStepOperator):
         entrypoint_command: List[str],
         environment: Dict[str, str],
     ) -> None:
-        """Submits a step run to Modal.
+        """Build an sbatch script and submit it to Slurm.
 
         Args:
             info: The step run information.
             entrypoint_command: The entrypoint command for the step.
             environment: The environment variables for the step.
 
-        Raises:
-            RuntimeError: If no Docker credentials are found for the container registry.
-            ValueError: If no container registry is found in the stack.
+
         """
         settings = cast(SlurmStepOperatorSettings, self.get_settings(info))
+        job_name = f"zenml-{info.run_name}-{info.step_name}"
 
     def get_status(self, step_run: "StepRunResponse") -> ExecutionStatus:
         """Gets the status of a submitted Modal sandbox.
@@ -88,14 +87,15 @@ class ModalStepOperator(BaseStepOperator):
         Returns:
             The step status.
         """
-        sandbox_id = str(step_run.run_metadata[STEP_SANDBOX_ID_METADATA_KEY])
-        sandbox = modal.Sandbox.from_id(sandbox_id)
-        return_code = sandbox.poll()
-        if return_code is None:
-            return ExecutionStatus.RUNNING
-        if return_code == 0:
-            return ExecutionStatus.COMPLETED
-        return ExecutionStatus.FAILED
+        pass
+        # sandbox_id = str(step_run.run_metadata[STEP_SANDBOX_ID_METADATA_KEY])
+        # sandbox = modal.Sandbox.from_id(sandbox_id)
+        # return_code = sandbox.poll()
+        # if return_code is None:
+        #     return ExecutionStatus.RUNNING
+        # if return_code == 0:
+        #     return ExecutionStatus.COMPLETED
+        # return ExecutionStatus.FAILED
 
     def cancel(self, step_run: "StepRunResponse") -> None:
         """Cancels a submitted Modal sandbox.
@@ -103,6 +103,7 @@ class ModalStepOperator(BaseStepOperator):
         Args:
             step_run: The step run.
         """
-        sandbox_id = str(step_run.run_metadata[STEP_SANDBOX_ID_METADATA_KEY])
-        sandbox = modal.Sandbox.from_id(sandbox_id)
-        sandbox.terminate()
+        pass
+        # sandbox_id = str(step_run.run_metadata[STEP_SANDBOX_ID_METADATA_KEY])
+        # sandbox = modal.Sandbox.from_id(sandbox_id)
+        # sandbox.terminate()
